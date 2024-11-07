@@ -43,6 +43,7 @@ cp .env.example .env
 4. **Run the Application**
 
 ```bash
-python manage.py migrate
 python manage.py runserver
+python manage.py initdb
+python manage.py create_stellar_account
 ```
