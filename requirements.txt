@@ -1,0 +1,35 @@
+# API and Web
+fastapi
+uvicorn
+python-multipart
+pydantic
+aiohttp
+
+# Database
+sqlalchemy
+alembic
+
+# Blockchain
+stellar-sdk
+
+# Price Oracle
+alpha_vantage
+
+# SMS
+twilio
+
+# HTTP and Networking
+requests
+
+# Environment and Configuration
+python-dotenv
+
+# Testing
+pytest
+pytest-asyncio
+pytest-cov
+
+# Development
+black
+flake8
+mypy
