@@ -2,7 +2,7 @@
 import click
 import uvicorn
 from src.database.db import init_db, Session
-from src.database.models import Crop, User, UserRole
+from src.database.models import Crop, User, UserRole, Future
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -146,6 +146,89 @@ def update_env_file(public_key, secret_key):
         click.echo("✅ .env file updated successfully!")
     else:
         click.echo("❌ .env file not found!")
+
+@cli.command()
+@click.argument('phone', required=False)
+def list_futures(phone):
+    """List all futures contracts or filter by phone number"""
+    try:
+        session = Session()
+        query = session.query(Future).join(User)
+        
+        if phone:
+            query = query.filter(User.phone_number == phone)
+            
+        futures = query.all()
+        
+        if not futures:
+            click.echo("No futures contracts found.")
+            return
+            
+        click.echo("\n🌾 Futures Contracts")
+        click.echo("=" * 80)
+        click.echo(f"{'ID':4} {'Farmer':15} {'Crop':10} {'Quantity':10} {'Strike':8} {'Premium':8} {'Status':10} {'Created'}")
+        click.echo("-" * 80)
+        
+        for future in futures:
+            click.echo(
+                f"{future.id:<4} "
+                f"{future.user.name[:15]:<15} "
+                f"{future.crop.name:<10} "
+                f"{future.quantity:<10.2f} "
+                f"{future.strike_price:<8.2f} "
+                f"{future.premium:<8.2f} "
+                f"{future.status:<10} "
+                f"{future.created_at.strftime('%Y-%m-%d')}"
+            )
+            
+        click.echo("-" * 80)
+        
+    except Exception as e:
+        click.echo(f"❌ Error: {str(e)}")
+    finally:
+        session.close()
+
+@cli.command()
+@click.argument('future_id', type=int)
+def show_future(future_id):
+    """Show detailed information about a specific future contract"""
+    try:
+        session = Session()
+        future = session.query(Future).filter_by(id=future_id).first()
+        
+        if not future:
+            click.echo(f"No future contract found with ID {future_id}")
+            return
+            
+        click.echo("\n🔎 Future Contract Details")
+        click.echo("=" * 50)
+        click.echo(f"ID:            {future.id}")
+        click.echo(f"Farmer:        {future.user.name}")
+        click.echo(f"Phone:         {future.user.phone_number}")
+        click.echo(f"Crop:          {future.crop.name}")
+        click.echo(f"Quantity:      {future.quantity} kg")
+        click.echo(f"Strike Price:  {future.strike_price} KES/kg")
+        click.echo(f"Premium:       {future.premium} KES")
+        click.echo(f"Status:        {future.status}")
+        click.echo(f"Created:       {future.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
+        click.echo(f"Expires:       {future.expiration_date.strftime('%Y-%m-%d %H:%M:%S')}")
+        click.echo(f"Contract ID:   {future.contract_address}")
+        
+        # Get current price
+        crop = session.query(Crop).filter_by(id=future.crop_id).first()
+        click.echo(f"Current Price: {crop.current_price} KES/kg")
+        
+        # Calculate potential payout
+        if crop.current_price < future.strike_price:
+            payout = (future.strike_price - crop.current_price) * future.quantity
+            click.echo(f"Potential Payout: {payout} KES")
+        
+        click.echo("=" * 50)
+        
+    except Exception as e:
+        click.echo(f"❌ Error: {str(e)}")
+    finally:
+        session.close()
 
 if __name__ == '__main__':
     cli() 

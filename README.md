@@ -1,4 +1,7 @@
-# AgriFutures
+<div align="center">
+  <img src="agri_futures_logo.png" alt="AgriFutures Logo" width="100" height="100" style="margin-right: 20px"/>
+  <h1>AgriFutures</h1>
+</div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
