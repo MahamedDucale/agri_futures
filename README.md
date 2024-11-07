@@ -20,18 +20,29 @@ AgriFutures is a revolutionary micro-futures platform that empowers rural women 
 ## 🛠️ Quick Start
 
 1. **Clone the Repository**
-# bash
-# git clone https://github.com/yourusername/agrifutures.git
-# cd agrifutures
+
+```bash
+git clone https://github.com/yourusername/agrifutures.git
+cd agrifutures
+```
+
 2. **Set Up Environment**
-# bash
-# python -m venv venv
-# source venv/bin/activate # On Windows: venv\Scripts\activate
-# pip install -r requirements.txt
+
+```bash
+python -m venv venv
+source venv/bin/activate # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
 3. **Configure Environment Variables**
-# bash
-# cp .env.example .env
+
+```bash
+cp .env.example .env
+```
+
 4. **Run the Application**
-# Run database migrations and start the server
-# python manage.py migrate
-# python manage.py runserver
+
+```bash
+python manage.py migrate
+python manage.py runserver
+```
